@@ -105,4 +105,39 @@ services:
     restart: {{ container.restart }}
 {% endif %}
 {% endif %}
+{% if container.networks is defined %}
+    networks:
+{% for network in container.networks %}
+      {{ network.name }}:
+{% if network.ip is defined %}
+        ipv4_address: {{ network.ip }}
+{% endif %}
 {% endfor %}
+{% endif %}
+{% endfor %}
+
+{% if networks is defined %}
+networks:
+{% for network in networks %}
+  {{ network.name }}:
+    driver: {{ network.driver }}
+{% if network.driver_opts is defined %}
+    driver_opts:
+{% for key in network.driver_opts.keys() %}
+      {{ key }}: {{ network.driver_opts[key] }}
+{% endfor %}
+{% endif %}
+{% if network.ipam_config_subnet is defined %}
+    ipam:
+      config:
+        - subnet: {{ network.ipam_config_subnet }}
+{% if network.ipam_config_gateway is defined %}
+          gateway: {{ network.ipam_config_gateway }}
+{% endif %}
+{% if network.ipam_config_ip_range is defined %}
+          ip_range: {{ network.ipam_config_ip_range }}
+{% endif %}
+{% endif %}
+
+{% endfor %}
+{% endif %}

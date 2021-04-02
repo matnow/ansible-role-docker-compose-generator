@@ -75,7 +75,7 @@ services:
     mem_limit: {{ container.mem_limit }}
 {% endif %}
 {% if container.command is defined %}
-    command: {{ command }}
+    command: {{ container.command }}
 {% endif %}
 {% if container.security_opt is defined %}
     security_opt:
